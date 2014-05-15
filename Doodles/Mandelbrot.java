@@ -4,6 +4,7 @@ import java.util.HashMap;
 import javax.swing.JFrame;
  
 public class Mandelbrot extends JFrame {
+	private static final long serialVersionUID = -2105345324636075152L;
 	private final double size = 400;
     private final int height = 1200;
     private final int width = 1920;
