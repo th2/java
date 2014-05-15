@@ -3,8 +3,10 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+//imports require jsoup-1.7.3.jar core library from http://jsoup.org/download
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 
@@ -20,8 +22,12 @@ public class Crawler {
 		try {
 			//TODO: add randomization 
 			//TODO: add exception handling if queue is empty
-			Document doc = Jsoup.connect(queue.removeFirst().getPath()).get();
-			Elements as = doc.select("a");
+			URL newLink = queue.removeFirst();
+			Document doc = Jsoup.connect(newLink.toString()).get();
+			Elements links = doc.select("a[href]");
+			for(Element link : links){
+				System.out.println(link.attr("abs:href"));
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
