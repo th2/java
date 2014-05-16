@@ -26,7 +26,15 @@ public class Crawler {
 			Document doc = Jsoup.connect(newLink.toString()).get();
 			Elements links = doc.select("a[href]");
 			for(Element link : links){
-				System.out.println(link.attr("abs:href"));
+				//System.out.println(link.attr("abs:href"));
+				URL url = new URL(link.attr("abs:href"));
+				if(found.containsKey(url)){
+					found.put(url, found.get(url)+1);
+					System.out.println(found.get(url)+" "+url);
+				}else{
+					found.put(url, 1);
+					queue.add(url);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
