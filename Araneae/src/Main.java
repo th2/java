@@ -6,12 +6,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		Crawler crawler = new Crawler();
-		try {
-			crawler.addToQueue(new URL("http://en.wikipedia.org/"));
-			crawler.crawl();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
+		crawler.addToQueue("http://en.wikipedia.org/wiki/Main_Page");
+		crawler.crawl();
 	}
 
 }

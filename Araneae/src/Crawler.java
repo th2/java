@@ -11,29 +11,36 @@ import org.jsoup.select.Elements;
 
 
 public class Crawler {
-	LinkedList<URL> queue = new LinkedList<URL>();
-	HashMap<URL, Integer> found = new HashMap<URL, Integer>();
+	LinkedList<String> queue = new LinkedList<String>();
+	HashMap<String, Integer> found = new HashMap<String, Integer>();
 	
-	public void addToQueue(URL url){
+	public void addToQueue(String url){
 		queue.add(url);
 	}
+	
+	public String cleanup(String url){
+		return url.split("#")[0];
+	}
+	
 
 	public void crawl() {
 		try {
 			//TODO: add randomization 
 			//TODO: add exception handling if queue is empty
-			URL newLink = queue.removeFirst();
-			Document doc = Jsoup.connect(newLink.toString()).get();
+			String newLink = queue.removeFirst();
+			Document doc = Jsoup.connect(newLink).get();
 			Elements links = doc.select("a[href]");
 			for(Element link : links){
 				//System.out.println(link.attr("abs:href"));
-				URL url = new URL(link.attr("abs:href"));
-				if(found.containsKey(url)){
-					found.put(url, found.get(url)+1);
-					System.out.println(found.get(url)+" "+url);
-				}else{
-					found.put(url, 1);
-					queue.add(url);
+				String url = cleanup(link.attr("abs:href"));
+				if(!url.equals(newLink)){
+					if(found.containsKey(url)){
+						found.put(url, found.get(url)+1);
+						System.out.println(found.get(url)+" "+url);
+					}else{
+						found.put(url, 1);
+						queue.add(url);
+					}
 				}
 			}
 		} catch (IOException e) {
