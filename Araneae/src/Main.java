@@ -11,8 +11,10 @@ public class Main {
 	public static void main(String[] args) {
 		Crawler crawler = new Crawler();
 		crawler.addToQueue("http://en.wikipedia.org/wiki/Main_Page");
-		for(int i = 0; i<1000; i++)
+		for(int i = 0; i<1500; i++){
 			crawler.crawl();
+			System.out.println("crawled "+i+" pages");
+		}
 
 		HashMap<String, Integer> sortedFound = (HashMap<String, Integer>) SortMap.sortByValue(crawler.found);
 		HashMap<String, Integer> sortedNumlinks = (HashMap<String, Integer>) SortMap.sortByValue(crawler.numlinks);

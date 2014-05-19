@@ -3,6 +3,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import java.util.Random;
+
 //imports require jsoup-1.7.3.jar core library from http://jsoup.org/download
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,6 +13,7 @@ import org.jsoup.select.Elements;
 
 
 public class Crawler {
+	boolean nonRandom = false;
 	LinkedList<String> queue = new LinkedList<String>();
 	HashMap<String, Integer> found = new HashMap<String, Integer>();
 	HashMap<String, Integer> numlinks = new HashMap<String, Integer>();
@@ -28,9 +31,14 @@ public class Crawler {
 
 	public void crawl() {
 		try {
-			//TODO: add randomization 
-			//TODO: add exception handling if queue is empty
-			String newLink = queue.removeFirst();
+			String newLink = "";
+			if(nonRandom)
+				newLink = queue.removeFirst();
+			else {
+				int pos = (new Random()).nextInt(queue.size());
+				newLink = queue.remove(pos);
+			}
+				
 			//System.out.println("new:"+newLink);
 			Document doc = Jsoup.connect(newLink).get();
 			Elements links = doc.select("a[href]");
