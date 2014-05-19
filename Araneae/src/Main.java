@@ -10,7 +10,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		if(args.length != 5)
-			System.out.println("parameters: [START URL] [NUMBER OF PAGES] [RANDOM] [OUT FILE FOUND] [OUT FILE NUMLINKS]");
+			System.out.println("parameters: [START URL] [NUMBER OF PAGES] [DETERMINISTIC] [OUT FILE FOUND] [OUT FILE NUMLINKS]");
 		else{
 			int numPages = Integer.parseInt(args[1]);
 			Crawler crawler = new Crawler(Boolean.parseBoolean(args[2]));

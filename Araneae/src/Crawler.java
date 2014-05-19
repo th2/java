@@ -13,39 +13,47 @@ import org.jsoup.select.Elements;
 
 
 public class Crawler {
-	boolean nonRandom;
+	boolean deterministic;
 	LinkedList<String> queue = new LinkedList<String>();
 	HashMap<String, Integer> found = new HashMap<String, Integer>();
 	HashMap<String, Integer> numlinks = new HashMap<String, Integer>();
 	
 	Crawler(){
-		nonRandom = false;
+		deterministic = false;
 	}
 	
-	Crawler(boolean nonRandom){
-		this.nonRandom = nonRandom;
+	Crawler(boolean deterministic){
+		this.deterministic = deterministic;
 	}
 	
 	public void addToQueue(String url){
 		queue.add(url);
 	}
 	
-	public String cleanup(String url){
+	private String cleanup(String url){
 		//TODO: add more canonization
 		String result = url.split("#")[0];
 		return result;
 	}
 	
+	private String getNext() {
+		String newLink = "";
+		if(deterministic)
+			newLink = queue.removeFirst();
+		else {
+			int pos = (new Random()).nextInt(queue.size());
+			newLink = queue.remove(pos);
+		}
+		if(newLink.startsWith("http"))
+			return newLink;
+		else
+			return getNext();
+	}
+	
 
 	public void crawl() {
 		try {
-			String newLink = "";
-			if(nonRandom)
-				newLink = queue.removeFirst();
-			else {
-				int pos = (new Random()).nextInt(queue.size());
-				newLink = queue.remove(pos);
-			}
+			String newLink = getNext();
 				
 			System.out.println("new:"+newLink);
 			Document doc = Jsoup.connect(newLink).get();
