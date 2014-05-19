@@ -1,3 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -11,13 +15,16 @@ public class Main {
 			crawler.crawl();
 		
 		HashMap<String, Integer> sorted = (HashMap<String, Integer>) SortMap.sortByValue(crawler.found);
-		for(Entry<String, Integer> entry : sorted.entrySet()) {
-		    String key = entry.getKey();
-		    Integer value = entry.getValue();
-		    
-		    System.out.println(value+" "+key);
-		    
+		try {
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("result.txt", true)));
+			for(Entry<String, Integer> entry : sorted.entrySet()) {
+				out.println(entry.getValue()+" "+entry.getKey());
+			}
+		    out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+	   
 	}
 
 }
