@@ -19,7 +19,9 @@ public class Crawler {
 	}
 	
 	public String cleanup(String url){
-		return url.split("#")[0];
+		//TODO: add more canonization
+		String result = url.split("#")[0];
+		return result;
 	}
 	
 
@@ -28,6 +30,7 @@ public class Crawler {
 			//TODO: add randomization 
 			//TODO: add exception handling if queue is empty
 			String newLink = queue.removeFirst();
+			//System.out.println("new:"+newLink);
 			Document doc = Jsoup.connect(newLink).get();
 			Elements links = doc.select("a[href]");
 			for(Element link : links){
@@ -36,7 +39,7 @@ public class Crawler {
 				if(!url.equals(newLink)){
 					if(found.containsKey(url)){
 						found.put(url, found.get(url)+1);
-						System.out.println(found.get(url)+" "+url);
+						//System.out.println(found.get(url)+" "+url);
 					}else{
 						found.put(url, 1);
 						queue.add(url);
