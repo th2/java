@@ -13,10 +13,18 @@ import org.jsoup.select.Elements;
 
 
 public class Crawler {
-	boolean nonRandom = false;
+	boolean nonRandom;
 	LinkedList<String> queue = new LinkedList<String>();
 	HashMap<String, Integer> found = new HashMap<String, Integer>();
 	HashMap<String, Integer> numlinks = new HashMap<String, Integer>();
+	
+	Crawler(){
+		nonRandom = false;
+	}
+	
+	Crawler(boolean nonRandom){
+		this.nonRandom = nonRandom;
+	}
 	
 	public void addToQueue(String url){
 		queue.add(url);
@@ -39,7 +47,7 @@ public class Crawler {
 				newLink = queue.remove(pos);
 			}
 				
-			//System.out.println("new:"+newLink);
+			System.out.println("new:"+newLink);
 			Document doc = Jsoup.connect(newLink).get();
 			Elements links = doc.select("a[href]");
 			numlinks.put(newLink, links.size());
