@@ -13,6 +13,7 @@ import org.jsoup.select.Elements;
 public class Crawler {
 	LinkedList<String> queue = new LinkedList<String>();
 	HashMap<String, Integer> found = new HashMap<String, Integer>();
+	HashMap<String, Integer> numlinks = new HashMap<String, Integer>();
 	
 	public void addToQueue(String url){
 		queue.add(url);
@@ -33,6 +34,7 @@ public class Crawler {
 			//System.out.println("new:"+newLink);
 			Document doc = Jsoup.connect(newLink).get();
 			Elements links = doc.select("a[href]");
+			numlinks.put(newLink, links.size());
 			for(Element link : links){
 				//System.out.println(link.attr("abs:href"));
 				String url = cleanup(link.attr("abs:href"));
