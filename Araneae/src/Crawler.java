@@ -1,9 +1,13 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
-
 import java.util.Random;
+
+import java.util.Map.Entry;
 
 //imports require jsoup-1.7.3.jar core library from http://jsoup.org/download
 import org.jsoup.Jsoup;
@@ -74,6 +78,46 @@ public class Crawler {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
+		if(args.length != 5)
+			System.out.println("parameters: "
+					+ "[START URL] "
+					+ "[NUMBER OF PAGES] "
+					+ "[DETERMINISTIC] "
+					+ "[SAVE RESULTS] "
+					+ "[OUT FILE FOUND] "
+					+ "[OUT FILE NUMLINKS] "
+					+ System.lineSeparator()
+					+ "example: java -cp ../jsoup-1.7.3.jar:. Crawler http://en.wikipedia.org/ 1500 true false found.txt numlinks.txt");
+		else{
+			int numPages = Integer.parseInt(args[1]);
+			Crawler crawler = new Crawler(Boolean.parseBoolean(args[2]));
+			crawler.addToQueue(args[0]);
+			for(int i = 0; i<numPages; i++){
+				crawler.crawl();
+				System.out.println("crawled "+i+" pages");
+			}
+
+			HashMap<String, Integer> sortedFound = (HashMap<String, Integer>) SortMap.sortByValue(crawler.found);
+			HashMap<String, Integer> sortedNumlinks = (HashMap<String, Integer>) SortMap.sortByValue(crawler.numlinks);
+			try {
+				PrintWriter outFound = new PrintWriter(new BufferedWriter(new FileWriter(args[4], true)));
+				for(Entry<String, Integer> entry : sortedFound.entrySet()) {
+					outFound.println(entry.getValue()+" "+entry.getKey());
+				}
+				outFound.close();
+			    
+				PrintWriter outNumlinks = new PrintWriter(new BufferedWriter(new FileWriter(args[5], true)));
+				for(Entry<String, Integer> entry : sortedNumlinks.entrySet()) {
+					outNumlinks.println(entry.getValue()+" "+entry.getKey());
+				}
+				outNumlinks.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
