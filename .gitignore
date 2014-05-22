@@ -13,3 +13,6 @@ hs_err_pid*
 
 # Eclipse metadata
 .metadata
+
+#Araneae temorary result files
+Araneae/result
