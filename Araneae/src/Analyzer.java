@@ -15,14 +15,24 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.JaroWinkler;
 public class Analyzer {
 
 	public static void main(String[] args) {
-		int numFiles = 51;
+		int numFiles = 1416;
 		System.out.println("stage 1: load files: 0/"+numFiles+" done");
 		String[] files = new String[numFiles];
 		for(int i=0;i<numFiles;i++){
-			System.out.println(files[i]);
+			files[i]=getFile("result/"+i+".html");
+			files[i]=files[i].replace(" ", ""); //replace spaces
+			files[i]=files[i].replace("	", ""); //replace tab
+			files[i]=files[i].replaceAll("\\<script.*?script\\>", ""); //remove scripts
+			files[i]=files[i].replaceAll("\\<head.*?head\\>", ""); //remove head
+			files[i]=files[i].replaceAll("\\<.*?\\>", ""); //replace tags
+			files[i]=files[i].replaceAll("\\&.[a-z]{0,10};", ""); //replace some special characters
+			files[i]=files[i].replace(".", "").replace(",", "")
+					.replace(":", "").replace(";", "")
+					.replace("!", "").replace("?", "")
+					.replace("-", "").replace("_", ""); //replace punctuation
 			System.out.println("stage 1: load files: "+i+"/"+(numFiles-1)+" done");
 		}
-		/*
+		
 		double[] minDistFile = new double[numFiles];
 		double[] minDistValue = new double[numFiles];
 		JaroWinkler algorithm = new JaroWinkler();
@@ -45,7 +55,7 @@ public class Analyzer {
 		}
 		for(int i=0;i<numFiles;i++){
 			System.out.println(i+".html "+minDistFile[i]+".html "+minDistValue[i]);
-		}*/
+		}
 	}
 	
 	private static String getFile(String path){
