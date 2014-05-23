@@ -14,5 +14,6 @@ hs_err_pid*
 # Eclipse metadata
 .metadata
 
-#Araneae temorary result files
+#Araneae and Doodles temporary result files
 Araneae/result
+Doodles/import
