@@ -20,6 +20,7 @@ import org.jsoup.select.Elements;
 public class Crawler {
 	boolean deterministic;
 	static boolean savePages;
+	String limitDomain;
 	static ArrayList<String> saveLog = new ArrayList<String>();
 	int saveCounter = 0;
 	LinkedList<String> queue = new LinkedList<String>();
@@ -31,9 +32,10 @@ public class Crawler {
 		savePages = false;
 	}
 	
-	Crawler(boolean deterministic, boolean savePages){
+	Crawler(boolean deterministic, boolean savePages, String limitDomain){
 		this.deterministic = deterministic;
 		this.savePages = savePages;
+		this.limitDomain = limitDomain;
 	}
 	
 	public void addToQueue(String url){
@@ -86,7 +88,8 @@ public class Crawler {
 						//System.out.println(found.get(url)+" "+url);
 					}else{
 						found.put(url, 1);
-						queue.add(url);
+						if(url.contains(limitDomain))
+							queue.add(url);
 					}
 				}
 			}
@@ -96,7 +99,7 @@ public class Crawler {
 	}
 	
 	public static void main(String[] args) {
-		if(args.length != 6)
+		if(args.length != 7)
 			System.out.println("parameters: "
 					+ "[START URL] "
 					+ "[NUMBER OF PAGES] "
@@ -104,11 +107,12 @@ public class Crawler {
 					+ "[SAVE PAGES] "
 					+ "[OUT FILE FOUND] "
 					+ "[OUT FILE NUMLINKS] "
+					+ "[LIMIT TO DOMAIN] "
 					+ System.lineSeparator()
 					+ "example: java -cp ../jsoup-1.7.3.jar:. Crawler http://en.wikipedia.org/ 1500 true false found.txt numlinks.txt");
 		else{
 			int numPages = Integer.parseInt(args[1]);
-			Crawler crawler = new Crawler(Boolean.parseBoolean(args[2]), Boolean.parseBoolean(args[3]));
+			Crawler crawler = new Crawler(Boolean.parseBoolean(args[2]), Boolean.parseBoolean(args[3]), args[6]);
 			crawler.addToQueue(args[0]);
 			for(int i = 0; i<numPages; i++){
 				crawler.crawl();

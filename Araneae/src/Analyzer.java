@@ -32,27 +32,43 @@ public class Analyzer {
 					.replace("-", "").replace("_", ""); //replace punctuation
 			System.out.println("stage 1: load files: "+i+"/"+(numFiles-1)+" done");
 		}
-		
+
+		double[] maxDistFile = new double[numFiles];
+		double[] maxDistValue = new double[numFiles];
 		double[] minDistFile = new double[numFiles];
 		double[] minDistValue = new double[numFiles];
 		JaroWinkler algorithm = new JaroWinkler();
 		double currentMax;
+		double currentMin;
+		System.out.println("stage 2: compare");
 		for(int i=0;i<numFiles;i++){
-			System.out.println("stage 2: compared "+i);
 			currentMax = 0;
+			currentMin = 100000;
 			for(int j=0;j<numFiles;j++){
 				if(i!=j){;
 					double diff = algorithm.getSimilarity(files[i], files[j]);
-					System.out.println(new Timestamp((new Date()).getTime())+" diff: "+diff+" (file "+j+")");
+					System.out.println(new Timestamp((new Date()).getTime())+" diff "+i+": "+diff+" (file "+j+")");
 					if(diff>currentMax){
 						currentMax=diff;
+						maxDistFile[i]=j;
+						maxDistValue[i]=currentMax;
+					}
+					if(diff<currentMin){
+						currentMin=diff;
 						minDistFile[i]=j;
-						minDistValue[i]=currentMax;
+						minDistValue[i]=currentMin;
 					}
 				}
 			}
-			System.out.println("result: file="+minDistFile[i]+" dist="+minDistValue[i]);
+			System.out.println(new Timestamp((new Date()).getTime())+" result "+i+
+					": file="+maxDistFile[i]+" dist="+maxDistValue[i]+
+					": file="+minDistFile[i]+" dist="+minDistValue[i]);
 		}
+		System.out.println("Max: ");
+		for(int i=0;i<numFiles;i++){
+			System.out.println(i+".html "+maxDistFile[i]+".html "+maxDistValue[i]);
+		}
+		System.out.println("Min: ");
 		for(int i=0;i<numFiles;i++){
 			System.out.println(i+".html "+minDistFile[i]+".html "+minDistValue[i]);
 		}
